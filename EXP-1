@@ -1,0 +1,184 @@
+# ============================================================
+# FIND-S ALGORITHM
+# REAL-WORLD SCENARIO:
+# Predicting Whether a Student Will Attend College Class
+# ============================================================
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ------------------------------------------------------------
+# TRAINING DATA
+# ------------------------------------------------------------
+
+data = [
+    ["Weekday", "Clear", "Bus",  "Yes", "Regular",   "Yes"],
+    ["Weekday", "Clear", "Bike", "Yes", "Regular",   "Yes"],
+    ["Weekend", "Rainy", "Bus",  "No",  "Regular",   "No"],
+    ["Weekday", "Clear", "Bus",  "Yes", "Practical", "Yes"],
+    ["Weekday", "Rainy", "Bus",  "Yes", "Regular",   "No"],
+    ["Weekday", "Clear", "Bike", "Yes", "Practical", "Yes"]
+]
+
+columns = [
+    "Day",
+    "Weather",
+    "Transport",
+    "Reminder",
+    "ClassType",
+    "Attend"
+]
+
+df = pd.DataFrame(data, columns=columns)
+
+print("=" * 70)
+print("STUDENT CLASS ATTENDANCE DATASET")
+print("=" * 70)
+
+display(df)
+
+
+# ------------------------------------------------------------
+# FIND-S ALGORITHM
+# ------------------------------------------------------------
+
+attributes = [
+    "Day",
+    "Weather",
+    "Transport",
+    "Reminder",
+    "ClassType"
+]
+
+hypothesis = None
+
+# Store number of specific attributes after every example
+specificity_history = []
+
+# Store hypothesis for displaying output
+hypothesis_history = []
+
+
+for index, row in df.iterrows():
+
+    example = row[attributes].tolist()
+    target = row["Attend"]
+
+    # FIND-S uses only positive examples
+    if target == "Yes":
+
+        # First positive example
+        if hypothesis is None:
+
+            hypothesis = example.copy()
+
+        else:
+
+            # Generalize when values are different
+            for i in range(len(hypothesis)):
+
+                if hypothesis[i] != example[i]:
+                    hypothesis[i] = "?"
+
+    # Count attributes that are still specific
+    specific_count = sum(
+        1 for value in hypothesis
+        if value != "?"
+    )
+
+    specificity_history.append(specific_count)
+    hypothesis_history.append(hypothesis.copy())
+
+
+# ------------------------------------------------------------
+# DISPLAY FIND-S PROGRESSION
+# ------------------------------------------------------------
+
+print("\n" + "=" * 70)
+print("FIND-S HYPOTHESIS PROGRESSION")
+print("=" * 70)
+
+for i, h in enumerate(hypothesis_history, start=1):
+
+    print(
+        "Training Example", i,
+        "->",
+        "<" + ", ".join(h) + ">"
+    )
+
+
+# ------------------------------------------------------------
+# FINAL HYPOTHESIS
+# ------------------------------------------------------------
+
+print("\n" + "=" * 70)
+print("FINAL MOST SPECIFIC HYPOTHESIS")
+print("=" * 70)
+
+print(
+    "<" + ", ".join(hypothesis) + ">"
+)
+
+
+# ============================================================
+# ONE GRAPH ONLY
+# ============================================================
+
+examples = [
+    "Example 1",
+    "Example 2",
+    "Example 3",
+    "Example 4",
+    "Example 5",
+    "Example 6"
+]
+
+plt.figure(figsize=(11, 6))
+
+bars = plt.bar(
+    examples,
+    specificity_history
+)
+
+# Add values on top of bars
+for bar, value in zip(bars, specificity_history):
+
+    plt.text(
+        bar.get_x() + bar.get_width() / 2,
+        bar.get_height() + 0.08,
+        str(value),
+        ha="center",
+        va="bottom",
+        fontsize=12,
+        fontweight="bold"
+    )
+
+
+plt.title(
+    "FIND-S Algorithm - Hypothesis Generalization",
+    fontsize=16,
+    fontweight="bold"
+)
+
+plt.xlabel(
+    "Training Examples",
+    fontsize=12
+)
+
+plt.ylabel(
+    "Number of Specific Attributes",
+    fontsize=12
+)
+
+# Start from zero
+plt.ylim(0, 6)
+
+plt.grid(
+    axis="y",
+    linestyle="--",
+    alpha=0.4
+)
+
+plt.tight_layout()
+
+plt.show()
