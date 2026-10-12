@@ -1,0 +1,25 @@
+
+import matplotlib.pyplot as plt
+
+# Count positive and negative training examples
+positive = sum(str(x[-1]).strip().lower() == 'yes' for x in examples)
+negative = sum(str(x[-1]).strip().lower() == 'no' for x in examples)
+
+# Display training example classification chart
+plt.figure(figsize=(6, 4))
+plt.bar(['Positive (Yes)', 'Negative (No)'],
+        [positive, negative])
+plt.title('Candidate-Elimination: Training Examples')
+plt.xlabel('Example Type')
+plt.ylabel('Number of Examples')
+plt.grid(axis='y', linestyle='--', alpha=0.4)
+plt.show()
+
+# Display boundary summary
+print("\nFINAL OUTPUT SUMMARY")
+print("--------------------")
+print("Total Examples:", len(examples))
+print("Positive Examples:", positive)
+print("Negative Examples:", negative)
+print("Specific Boundary (S):", S)
+print("General Boundary (G):", G)
