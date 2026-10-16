@@ -1,0 +1,37 @@
+
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+
+# Sample dataset
+X = [[1, 2], [2, 3], [3, 3],
+     [6, 7], [7, 8], [8, 8]]
+
+y = [0, 0, 0, 1, 1, 1]
+
+# Create and train K-NN model
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X, y)
+
+# Predict new data
+new_data = [[2, 2], [7, 7]]
+prediction = knn.predict(new_data)
+
+print("Predictions:", prediction)
+
+# Plot original data
+plt.scatter([p[0] for p in X],
+            [p[1] for p in X],
+            c=y, cmap='coolwarm', label="Training Data")
+
+# Plot new data points
+plt.scatter([p[0] for p in new_data],
+            [p[1] for p in new_data],
+            color='green', marker='*',
+            s=200, label="New Data")
+
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("K-Nearest Neighbours Classification")
+plt.legend()
+plt.grid(True)
+plt.show()
