@@ -1,0 +1,22 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+
+X = np.array([1, 2, 3, 4, 5, 6]).reshape(-1, 1)
+y = np.array([0, 0, 0, 1, 1, 1])
+
+model = LogisticRegression()
+model.fit(X, y)
+
+pred = model.predict(X)
+print("Predicted Values:", pred)
+
+plt.scatter(X, y, color='blue', label='Actual Data')
+plt.scatter(X, pred, color='red', marker='x', label='Predicted Data')
+plt.xlabel("Input")
+plt.ylabel("Class")
+plt.title("Logistic Regression")
+plt.legend()
+plt.grid(True)
+plt.show()
