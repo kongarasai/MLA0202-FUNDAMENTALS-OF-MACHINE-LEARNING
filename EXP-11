@@ -1,0 +1,32 @@
+import matplotlib.pyplot as plt
+
+# Credit Score Classification
+income = int(input("Enter Annual Income: "))
+loan = int(input("Enter Loan Amount: "))
+payment = int(input("Enter On-time Payments (0-10): "))
+
+if income >= 500000 and loan <= 200000 and payment >= 8:
+    score = "GOOD"
+    value = 3
+
+elif income >= 250000 and payment >= 5:
+    score = "AVERAGE"
+    value = 2
+
+else:
+    score = "POOR"
+    value = 1
+
+print("\nCredit Score:", score)
+
+# Visualization
+categories = ["Poor", "Average", "Good"]
+values = [1, 2, 3]
+
+plt.bar(categories, values)
+
+plt.title("Credit Score Classification")
+plt.xlabel("Credit Category")
+plt.ylabel("Score Level")
+
+plt.show()
