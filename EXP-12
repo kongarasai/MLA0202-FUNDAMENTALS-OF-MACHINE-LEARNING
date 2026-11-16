@@ -1,0 +1,39 @@
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load Iris Dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split Dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create KNN Model
+knn = KNeighborsClassifier(n_neighbors=3)
+
+# Train Model
+knn.fit(X_train, y_train)
+
+# Predict
+y_pred = knn.predict(X_test)
+
+# Calculate Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy * 100, "%")
+
+# Visualization using Matplotlib
+plt.scatter(X_test[:, 0], X_test[:, 1],
+            c=y_pred, cmap='viridis', s=80)
+
+plt.xlabel("Sepal Length")
+plt.ylabel("Sepal Width")
+plt.title("Iris Flower Classification Using KNN")
+plt.colorbar(label="Flower Class")
+
+plt.show()
