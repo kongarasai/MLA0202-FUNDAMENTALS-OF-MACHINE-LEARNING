@@ -1,0 +1,65 @@
+# Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# Create dataset
+data = {
+    'Month': list(range(1, 13)),
+    'Advertising': [10, 12, 15, 18, 20, 22, 25, 28, 30, 32, 35, 40],
+    'Sales': [100, 120, 130, 150, 170, 180, 200, 220, 230, 250, 270, 300]
+}
+
+df = pd.DataFrame(data)
+
+# Features and target
+X = df[['Month', 'Advertising']]
+y = df['Sales']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create model
+model = LinearRegression()
+
+# Train model
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Mean Absolute Error:", mean_absolute_error(y_test, y_pred))
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+print("R2 Score:", r2_score(y_test, y_pred))
+
+# Predict future sales
+future_data = pd.DataFrame({
+    'Month': [13],
+    'Advertising': [42]
+})
+
+future_sales = model.predict(future_data)
+
+print("Predicted Future Sales:", round(future_sales[0], 2))
+
+# Actual vs Predicted Graph
+plt.scatter(y_test, y_pred, color='blue')
+plt.xlabel("Actual Sales")
+plt.ylabel("Predicted Sales")
+plt.title("Actual vs Predicted Sales")
+plt.show()
+
+# Sales Trend
+plt.plot(df['Month'], df['Sales'], marker='o')
+plt.xlabel("Month")
+plt.ylabel("Sales")
+plt.title("Monthly Sales Trend")
+plt.grid()
+plt.show()
