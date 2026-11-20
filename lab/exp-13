@@ -1,0 +1,59 @@
+# Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# Create dataset
+data = {
+    'Age': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'Kilometers': [5000, 10000, 15000, 20000, 25000,
+                   30000, 35000, 40000, 45000, 50000],
+    'Price': [900000, 850000, 800000, 750000, 700000,
+              650000, 600000, 550000, 500000, 450000]
+}
+
+df = pd.DataFrame(data)
+
+# Features and target
+X = df[['Age', 'Kilometers']]
+y = df['Price']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create model
+model = LinearRegression()
+
+# Train model
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Mean Absolute Error:", mean_absolute_error(y_test, y_pred))
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+print("R2 Score:", r2_score(y_test, y_pred))
+
+# Predict new car price
+new_car = pd.DataFrame({
+    'Age': [3],
+    'Kilometers': [18000]
+})
+
+price = model.predict(new_car)
+print("Predicted Car Price: Rs.", round(price[0], 2))
+
+# Visualization
+plt.scatter(df['Age'], df['Price'], color='blue', label='Actual Price')
+plt.plot(df['Age'], model.predict(X), color='red', label='Predicted Price')
+plt.xlabel("Car Age")
+plt.ylabel("Car Price")
+plt.title("Car Price Prediction")
+plt.legend()
+plt.show()
